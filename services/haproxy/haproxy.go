@@ -4,6 +4,7 @@ import (
 	conf "github.com/QubitProducts/bamboo/configuration"
 	"github.com/QubitProducts/bamboo/services/marathon"
 	"github.com/QubitProducts/bamboo/services/service"
+	"log"
 )
 
 type templateData struct {
@@ -14,6 +15,7 @@ type templateData struct {
 func GetTemplateData(config *conf.Configuration, storage service.Storage) (*templateData, error) {
 
 	apps, err := marathon.FetchApps(config.Marathon, config)
+	log.Printf("apps ===== %+v", apps)
 
 	if err != nil {
 		return nil, err

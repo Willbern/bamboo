@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/QubitProducts/bamboo/configuration"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"sort"
 	"strings"
@@ -104,7 +105,7 @@ type marathonHealthCheck struct {
 
 func fetchMarathonApps(endpoint string, conf *configuration.Configuration) (map[string]marathonApp, error) {
 	client := &http.Client{}
-	req, _ := http.NewRequest("GET", endpoint+"/v2/apps", nil)
+	req, _ := http.NewRequest("GET", endpoint+"/v2/apps?id="+conf.Application.Id, nil)
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-Type", "application/json")
 	if len(conf.Marathon.User) > 0 && len(conf.Marathon.Password) > 0 {
@@ -309,6 +310,7 @@ func _fetchApps(url string, conf *configuration.Configuration) (AppList, error) 
 	}
 
 	apps := createApps(tasks, marathonApps)
+	log.Printf("createApps:== %+v", apps)
 	sort.Sort(apps)
 	return apps, nil
 }

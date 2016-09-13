@@ -1,0 +1,33 @@
+{
+  "Marathon": {
+    "Endpoint": "http://192.168.1.155:8080"
+  },
+
+  "Bamboo": {
+    "Endpoint": "http://192.168.1.96:8000",
+    "Zookeeper": {
+      "Host": "192.168.1.155:2181",
+      "Path": "/bamboo",
+      "ReportingDelay": 5
+    }
+  },
+
+  "HAProxy": {
+    "TemplatePath": "config/haproxy_template.cfg",
+    "OutputPath": "haproxy.cfg",
+    "ReloadCommand": "haproxy -f haproxy.cfg -p /var/run/haproxy.pid -D -sf $(cat /var/run/haproxy.pid)",
+    "ReloadValidationCommand": "haproxy -c -f {{.}}"
+  },
+
+  "StatsD": {
+    "Enabled": false,
+    "Host": "localhost:8125",
+    "Prefix": "bamboo-server.development."
+  },
+
+  "Application": {
+  	"Id": "2048-zhguo"
+  }
+}
+
+
