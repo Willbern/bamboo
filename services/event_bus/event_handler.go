@@ -16,7 +16,24 @@ type MarathonEvent struct {
 	// EventType can be
 	// api_post_event, status_update_event, subscribe_event
 	EventType string
+	AppId     string
 	Timestamp string
+}
+
+type ApiPostEvent struct {
+	EventType     string
+	TimeStamp     string
+	AppDefinition AppDefinition
+}
+
+type AppDefinition struct {
+	Id string
+}
+
+type StatusUpdateEvent struct {
+	EventType string
+	TimeStamp string
+	AppId     string
 }
 
 type ZookeeperEvent struct {
@@ -97,6 +114,8 @@ func ensureLatestConfig(conf *configuration.Configuration, storage service.Stora
 		return
 	}
 
+	log.Println("content-----", content)
+	log.Println("outputpath------ ", conf.HAProxy.OutputPath)
 	req, err := isReloadRequired(conf.HAProxy.OutputPath, content)
 	if err != nil || !req {
 		return

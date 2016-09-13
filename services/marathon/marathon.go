@@ -112,7 +112,8 @@ type marathonHealthCheck struct {
 
 func fetchMarathonApps(endpoint string, conf *configuration.Configuration) (map[string]marathonApp, error) {
 	client := &http.Client{}
-	req, _ := http.NewRequest("GET", endpoint+"/v2/apps", nil)
+	req, _ := http.NewRequest("GET", endpoint+"/v2/apps?id="+conf.Application.Id, nil)
+
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-Type", "application/json")
 	if len(conf.Marathon.User) > 0 && len(conf.Marathon.Password) > 0 {
