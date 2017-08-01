@@ -1,22 +1,11 @@
-FROM golang:1.8
+FROM demoregistry.dataman-inc.com/pufa/rhel-go:1.8.3
 
-ENV DEBIAN_FRONTEND noninteractive
 
-RUN echo deb http://httpredir.debian.org/debian jessie-backports main | \
-      sed 's/\(.*-backports\) \(.*\)/&@\1-sloppy \2/' | tr @ '\n' | \
-      tee /etc/apt/sources.list.d/backports.list && \
-    curl https://haproxy.debian.net/bernat.debian.org.gpg | \
-      apt-key add - && \
-    echo deb http://haproxy.debian.net jessie-backports-1.5 main | \
-      tee /etc/apt/sources.list.d/haproxy.list
+RUN yum install -y epel-release --releasever=7 && \    
+    yum install -y  --releasever=7 software-properties-common git libnl3-cli libnl3 mercurial supervisor  haproxy  && \
+    rm -rf /var/cache/yum/x86_64
 
-RUN apt-get update -yqq && \
-    apt-get install -yqq software-properties-common && \
-    apt-get install -yqq git mercurial supervisor && \
-    apt-get install -yqq haproxy -t jessie-backports-1.5 && \
-    rm -rf /var/lib/apt/lists/*
-
-ADD builder/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+ADD builder/supervisord.conf.prod /etc/supervisord.conf.prod
 ADD builder/run.sh /run.sh
 
 WORKDIR /go/src/github.com/QubitProducts/bamboo
@@ -29,15 +18,11 @@ ADD . /go/src/github.com/QubitProducts/bamboo
 RUN go build && \
     ln -s /go/src/github.com/QubitProducts/bamboo /var/bamboo && \
     mkdir -p /run/haproxy && \
-    mkdir -p /var/log/supervisor
+    mkdir -p /var/log/supervisor && \
+    rm -rf /etc/haproxy
+   
 
-VOLUME /var/log/supervisor
-
-RUN apt-get clean && \
-    rm -rf /tmp/* /var/tmp/* && \
-    rm -rf /var/lib/apt/lists/* && \
-    rm -f /etc/dpkg/dpkg.cfg.d/02apt-speedup && \
-    rm -f /etc/ssh/ssh_host_*
+ADD /builder/haproxy /etc/haproxy 
 
 EXPOSE 80 8000
 

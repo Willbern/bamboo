@@ -15,7 +15,7 @@
   "HAProxy": {
     "TemplatePath": "config/haproxy_template.cfg",
     "OutputPath": "/etc/haproxy/haproxy.cfg",
-    "ReloadCommand": "haproxy -f /etc/haproxy/haproxy.cfg -p /var/run/haproxy.pid -D -sf $(cat /var/run/haproxy.pid)",
+    "ReloadCommand": "sh /var/bamboo/config/restart_haproxy.sh",
     "ReloadValidationCommand": "haproxy -c -f {{.}}"
   },
 
