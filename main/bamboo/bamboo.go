@@ -98,10 +98,10 @@ func initServer(conf *configuration.Configuration, storage service.Storage, even
 	// Status live information
 	router := martini.Classic()
 	router.Use(func(ctx martini.Context, res http.ResponseWriter, req *http.Request) {
-		req.Header.Set("Access-Control-Allow-Origin", "*")
-		req.Header.Set("Access-Control-Allow-Credentials", "true")
-		req.Header.Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, PATCH")
-		req.Header.Set("Access-Control-Allow-Headers", "Content-Type, Depth, User-Agent, X-File-Size, X-Requested-With, X-Requested-By, If-Modified-Since, X-File-Name, Cache-Control, X-XSRFToken, Authorization")
+		res.Header().Set("Access-Control-Allow-Origin", "*")
+		res.Header().Set("Access-Control-Allow-Credentials", "true")
+		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, PATCH")
+		res.Header().Set("Access-Control-Allow-Headers", "Content-Type, Depth, User-Agent, X-File-Size, X-Requested-With, X-Requested-By, If-Modified-Since, X-File-Name, Cache-Control, X-XSRFToken, Authorization")
 		fmt.Println("options")
 		if req.Method == "OPTIONS" {
 			res.WriteHeader(204)
