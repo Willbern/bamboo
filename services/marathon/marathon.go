@@ -172,7 +172,7 @@ func FetchApps(maraconf configuration.Marathon, conf *configuration.Configuratio
 			for _, marathonApp := range marathonApps {
 				sort.Sort(marathonApp.Tasks)
 			}
-			apps := createApps(marathonApps)
+			apps := createApps(marathonApps, conf)
 			sort.Sort(apps)
 			return apps, nil
 		}
@@ -219,10 +219,19 @@ func parseJSON(url string, conf *configuration.Configuration, out interface{}) e
 	return nil
 }
 
-func createApps(marathonApps []marathonApp) AppList {
+func createApps(marathonApps []marathonApp, conf *configuration.Configuration) AppList {
 	apps := AppList{}
 
 	for _, mApp := range marathonApps {
+		protocol, ok := mApp.Labels["HAPROXY_PROTOCOL_TYPE"]
+		if ok {
+			log.Printf("%s 's protocol is %s ", mApp.Id, protocol)
+		} else {
+			log.Printf("%s 's protocol does not exist", mApp.Id)
+		}
+		if protocol != conf.HAProxy.ProtocolType {
+			continue
+		}
 		appId := mApp.Id
 		// Try to handle old app id format without slashes
 		appPath := "/" + strings.TrimPrefix(mApp.Id, "/")

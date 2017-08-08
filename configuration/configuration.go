@@ -58,6 +58,7 @@ func FromFile(filePath string) (Configuration, error) {
 	setValueFromEnv(&conf.HAProxy.ReloadCommand, "HAPROXY_RELOAD_CMD")
 	setValueFromEnv(&conf.HAProxy.ReloadValidationCommand, "HAPROXY_RELOAD_VALIDATION_CMD")
 	setValueFromEnv(&conf.HAProxy.ReloadCleanupCommand, "HAPROXY_RELOAD_CLEANUP_CMD")
+	setValueFromEnv(&conf.HAProxy.ProtocolType, "HAPROXY_PROTOCOL_TYPE")
 
 	setValueFromEnv(&conf.StatsD.Host, "STATSD_HOST")
 	setValueFromEnv(&conf.StatsD.Prefix, "STATSD_PREFIX")
